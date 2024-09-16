@@ -2,8 +2,9 @@
     text-align: center;
 }
 
-#btn-dialog-fechar {
+#dialog-fechar {
     position: absolute;
     top: 0;
     right: 0;
+    
 }
