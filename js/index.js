@@ -1,3 +1,5 @@
+// TO-DO:
+// organizar código
 const diaSemana = document.getElementById("dia-semana");
 const dataAtual = document.getElementById("data-atual");
 const horaAtual = document.getElementById("hora-atual");
@@ -8,7 +10,6 @@ btnRegistrarPonto.addEventListener("click", register);
 diaSemana.textContent = getWeekDay();
 dataAtual.textContent = getCurrentDate();
 
-
 const dialogPonto = document.getElementById("dialog-ponto");
 
 const dialogData = document.getElementById("dialog-data");
@@ -17,21 +18,61 @@ dialogData.textContent = getCurrentDate();
 const dialogHora = document.getElementById("dialog-hora");
 dialogHora.textContent = getCurrentTime();
 
-
-const btnDialogEntrada = document.getElementById("btn-dialog-entrada");
-btnDialogEntrada.addEventListener("click", () => {
-    saveRegisterLocalStorage(getObjectRegister("entrada"));
-});
+const selectRegisterType = document.getElementById("register-type");
 
 
-const btnDialogSaida = document.getElementById("btn-dialog-saida");
-btnDialogSaida.addEventListener("click", () => {
-    saveRegisterLocalStorage(getObjectRegister("saida"));
-});
+// TO-DO:
+// finalizar a função
+function setRegisterType() {
+    let lastType = localStorage.getItem("lastRegisterType");
+    if(lastType == "entrada") {
+        selectRegisterType.value = "intervalo";
+        return;
+    }
+    if(lastType == "intervalo") {
 
-
-function getObjectRegister(registerType) {
+    }
+    if(lastType == "volta-intervalo") {
+        
+    }
+    if(lastType == "saida") {
     
+    }
+    // Continuar de acordo com as regras abaixo
+    // REGRA
+    // ÚLTIMO PONTO DO USUÁRIO  |  VALOR DA OPTION DO SELECT
+    // Entrada                  |  Intervalo
+    // Intervalo                |  Volta Intervalo
+    // Volta Intervalo          |  Saída
+    // Saída                    |  Entrada
+}
+
+
+
+const btnDialogRegister = document.getElementById("btn-dialog-register");
+btnDialogRegister.addEventListener("click", () => {
+    // PENSAR: o que fazer quando um usuário registrar o mesmo tipo de ponto
+    // dentro de x minutos?
+
+    let register = getObjectRegister(selectRegisterType.value);
+    saveRegisterLocalStorage(register);
+    
+    localStorage.setItem("lastRegisterType", selectRegisterType.value);
+
+    // TO-DO:
+    // Informar o usuário do status do registro do ponto
+    // Sucesso ou falha
+    // Pode ser apresentado na tela principal no cabeçalho
+    // Efeito de transição e aparecer por 3 a 5s depois sumir
+    dialogPonto.close();
+});
+
+
+
+// cria um objeto correspondente a um registro de ponto
+// com data/hora/localizacao atualizados
+// o parâmetro é o tipo de ponto
+function getObjectRegister(registerType) {    
     ponto = {
         "date": getCurrentDate(),
         "time": getCurrentTime(),
@@ -47,11 +88,14 @@ btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 })
 
+
 let registersLocalStorage = getRegisterLocalStorage("register");
+
 
 function saveRegisterLocalStorage(register) {
 
     registersLocalStorage.push(register);
+
     localStorage.setItem("register", JSON.stringify(registersLocalStorage));
 }
 
